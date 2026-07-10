@@ -92,6 +92,9 @@ Edge cases handled:
 - 19 unique leads processed end-to-end
 - Escalation fired correctly on unresponded high-score leads
 - Weekly report confirmed correct counts
+## Demo
+- [- Google Sheets Trigger → Discord Notification]
+  https://www.youtube.com/watch?v=nJo5LvylUMo
 
 ## Known Limitations
 
