@@ -1,0 +1,262 @@
+{
+  "name": "Escalation Check",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6115bbde-843d-485a-bb22-9497b1ced5b4",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "RiTOn55LqvNCm1s8",
+          "mode": "list",
+          "cachedResultName": "RepB2B",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/RiTOn55LqvNCm1s8"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "2269edc1-6acd-4a8b-86a1-d0d41785aa1f",
+      "name": "GetRepB2B"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "1f17dfb0-b43b-4b26-af67-c20583235531",
+      "name": "FilterUnresponded"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=🚨 ESCALATION ALERT 🚨\nLead not responded to after 2 hours.\n\n\nEmail: {{ $json.email }}\nScore: {{ $json.score }}\nSource: {{ $json.source }}\nNotified at: {{ $json.notified_at }}\n\nAction required — respond now.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "81d10086-09de-45e8-b188-0786c18d5d7a",
+      "name": "SendEscalation",
+      "webhookId": "f2ac0d93-1e51-465a-9cb3-1ad14bd35ea9",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "X1aOerlnOVaT0bqT",
+          "name": "myserver"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "RiTOn55LqvNCm1s8",
+          "mode": "list",
+          "cachedResultName": "RepB2B",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/RiTOn55LqvNCm1s8"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email",
+              "keyValue": "={{ $('FilterUnresponded').item.json.email }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "escalated": true
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "intent",
+              "displayName": "intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "notified_at",
+              "displayName": "notified_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "responded",
+              "displayName": "responded",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "escalated",
+              "displayName": "escalated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "f7af3702-7c99-41bd-94dd-2f8514c73379",
+      "name": "MarkEscalated"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "GetRepB2B",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetRepB2B": {
+      "main": [
+        [
+          {
+            "node": "FilterUnresponded",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FilterUnresponded": {
+      "main": [
+        [
+          {
+            "node": "SendEscalation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SendEscalation": {
+      "main": [
+        [
+          {
+            "node": "MarkEscalated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b56075a3-fb61-41ec-a86a-644c79e0dfd3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6d02732c81716336476235c97efb52188caa99fc8b23d9d8fc1bf9045eb2d0a2"
+  },
+  "nodeGroups": [],
+  "id": "jXxExN3vTDGe29IY",
+  "tags": []
+}

@@ -1,0 +1,1566 @@
+{
+  "name": "LeadMain",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "792926e5-2c40-44c4-a602-5133011d338d",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        48
+      ],
+      "id": "e22a930c-7995-4fb6-b15e-4fbd0818cd71",
+      "name": "Webhook",
+      "webhookId": "792926e5-2c40-44c4-a602-5133011d338d"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "Label_5009569082413544938"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        48,
+        192
+      ],
+      "id": "0a951e68-adbc-45e8-8853-638964ba2f27",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fSfn7TQ0JIGgrfg7",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1IRvSXXgZqY9eflf-ZW246iTtPOUMzl7G0dn4je0qdrM/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IRvSXXgZqY9eflf-ZW246iTtPOUMzl7G0dn4je0qdrM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        48,
+        352
+      ],
+      "id": "85c40272-bb86-45d7-9637-c61d22798d6d",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "oxK9YbwFEItGcDIp",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ac3f1941-2bf7-4792-bd99-26afa3d7761a",
+              "name": "name",
+              "value": "={{ $json.From.split('<')[0].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "bd83c763-6919-433c-ac27-83ffd73a7529",
+              "name": "email",
+              "value": "={{ $json.From.extractEmail() }}",
+              "type": "string"
+            },
+            {
+              "id": "faeb8a26-928c-410f-936f-c9d44f1f5abe",
+              "name": "message",
+              "value": "={{ $json.snippet }}",
+              "type": "string"
+            },
+            {
+              "id": "54891e71-7168-4edf-bb41-20c54f6d794a",
+              "name": "source",
+              "value": "gmail",
+              "type": "string"
+            },
+            {
+              "id": "49b7594f-8b79-4835-8503-727ffee5fa4e",
+              "name": "time",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        192
+      ],
+      "id": "cffe28dc-79c7-4e20-8ac8-05a795aa0bf9",
+      "name": "ExtractFieldsGmail"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c10f3813-305e-4d32-9f12-7fdae7d23e89",
+              "name": "name",
+              "value": "={{ $json.body.name|| 'Unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "bd83c763-6919-433c-ac27-83ffd73a7529",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "faeb8a26-928c-410f-936f-c9d44f1f5abe",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "54891e71-7168-4edf-bb41-20c54f6d794a",
+              "name": "source",
+              "value": "Webhook",
+              "type": "string"
+            },
+            {
+              "id": "6781fb4d-df88-49b0-ad3b-458dc77f440c",
+              "name": "time",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        64
+      ],
+      "id": "87155862-3ec4-49ea-9fa0-239638d8825c",
+      "name": "ExtractFieldsWebhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ac3f1941-2bf7-4792-bd99-26afa3d7761a",
+              "name": "name",
+              "value": "={{ $json.Name }}",
+              "type": "string"
+            },
+            {
+              "id": "bd83c763-6919-433c-ac27-83ffd73a7529",
+              "name": "email",
+              "value": "={{ $json['Email'] }}",
+              "type": "string"
+            },
+            {
+              "id": "faeb8a26-928c-410f-936f-c9d44f1f5abe",
+              "name": "message",
+              "value": "={{ $json.Message }}",
+              "type": "string"
+            },
+            {
+              "id": "54891e71-7168-4edf-bb41-20c54f6d794a",
+              "name": "source",
+              "value": "={{ $json['Source'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a1871c5a-cb03-4e25-b528-e89e1a47933f",
+              "name": "time",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        352
+      ],
+      "id": "824121a9-4975-4523-856a-c338216224bf",
+      "name": "ExtractFieldsLinkedin"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Name: {{ $json.name }}\nEmail: {{ $json.email }}\nMessage: {{ $json.message }}\nSource: {{ $json.source }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a lead qualification assistant. Given a lead's name, email, message, and source, output a JSON assessment.\n\nScore 1-10:\n1-2: not a lead (spam, recruiter pitch, vendor cold-pitch, junk/empty)\n3-4: low quality (vague, one-word, no real need shown)\n5-6: moderate (some interest, thin on detail)\n7-8: good (clear need, realistic scope, genuine intent)\n9-10: high priority (urgency, budget/timeline, explicit ask for call/quote)\n\nIntent (pick one): genuine_inquiry, vague_interest, spam_or_pitch, not_a_lead\n\nRules:\n- Any message under 5 words, empty, or URL-only MUST score 4 or below, no exceptions. Urgent-sounding words (\"now\", \"asap\", \"urgent\") do NOT override this — urgency without a stated need is still a thin message, not a high-priority one.\n- A message only counts as high priority (9-10) if it states an actual need, service, project, or problem AND shows urgency/budget/timeline. Urgency language alone, with no stated need, caps at 4.\n- Partnership/vendor/service-offering pitches → spam_or_pitch, regardless of tone.\n- Non-English messages: judge content, don't penalize for language.\n- Ignore forwarded/signature/thread boilerplate; judge only the human-written inquiry.\n- Never infer unstated name/need/urgency; missing info lowers score, don't fill gaps.\n- Do not alter, correct, or reformat the name, email, or source — copy them exactly as given in the input, even if they look malformed.\n- Invalid or malformed email addresses (missing @, no domain, commas instead of periods, random strings) → score 2 or below, intent: not_a_lead, regardless of message content. Copy the email exactly as given.\n\nOutput rules:\n- Respond with ONLY the final JSON object below. Nothing else.\n- Do not repeat, echo, quote, or reference any schema, instructions, or formatting rules in your response.\n- Do not include markdown code fences (no ```).\n- Output exactly one JSON object, nothing before or after it.\n\n{\"name\": \"<copy from input>\", \"email\": \"<copy from input>\", \"source\": \"<copy from input>\", \"score\": <1-10>, \"intent\": \"<category>\", \"summary\": \"<one sentence>\"}"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1296,
+        240
+      ],
+      "id": "05cd6219-3370-4626-971e-4c2d7a6c6c33",
+      "name": "Basic LLM Chain",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        384
+      ],
+      "id": "7d8a05a7-a8fb-478c-8bfe-281ad741ff22",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "Lw1zp9uwfjYJFoVN",
+          "name": "Groq API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.item.json.text || $input.item.json.output || '';\n\nconst matches = typeof raw === 'string' ? raw.match(/\\{[\\s\\S]*?\\}/g) : null;\n\nlet parsed = null;\n\nif (matches) {\n  for (let i = matches.length - 1; i >= 0; i--) {\n    try {\n      const candidate = JSON.parse(matches[i]);\n      if (candidate.score !== undefined && candidate.intent !== undefined && candidate.name !== undefined) {\n        parsed = candidate;\n        break;\n      }\n    } catch (e) {\n      continue;\n    }\n  }\n}\n\nif (!parsed) {\n  return {\n    json: {\n      error: true,\n      reason: 'parse_failed',\n      raw_output: raw\n    }\n  };\n}\n\nreturn {\n  json: {\n    name: parsed.name,\n    email: parsed.email,\n    source: parsed.source,\n    score: parsed.score,\n    intent: parsed.intent,\n    summary: parsed.summary\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        240
+      ],
+      "id": "d4c638c4-707f-4c28-8147-fd996028ad92",
+      "name": "ParserOfClients",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.score }}",
+                    "rightValue": 2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "lte"
+                    },
+                    "id": "c120be2d-1a81-4785-b085-1f1d352b3b8c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "archive"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e1f9e237-0c05-4f54-824d-ae6832c29b0d",
+                    "leftValue": "={{ $json.score }}",
+                    "rightValue": 7,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "rep"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a83b0395-0a66-4579-898b-9f28f089fb64",
+                    "leftValue": "={{ $json.score }}",
+                    "rightValue": 2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "log"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1792,
+        224
+      ],
+      "id": "39ddcfef-820a-44a7-965e-a5d6408671dd",
+      "name": "ScoreChecker"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "M6vic9NHiILwDT5f",
+          "mode": "list",
+          "cachedResultName": "archiveB2B",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/M6vic9NHiILwDT5f"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "score": "={{ $('ParserOfClients').item.json.score }}",
+            "intent": "={{ $('ParserOfClients').item.json.intent }}",
+            "summary": "={{ $('ParserOfClients').item.json.summary }}",
+            "email": "={{ $('ParserOfClients').item.json.email }}",
+            "source": "={{ $('ParserOfClients').item.json.source }}",
+            "name": "={{ $('ParserOfClients').item.json.name}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "intent",
+              "displayName": "intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2032,
+        96
+      ],
+      "id": "f3da0145-c142-45d9-aa39-04b3b3d74da9",
+      "name": "ArchivInsert"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "M6vic9NHiILwDT5f",
+          "mode": "list",
+          "cachedResultName": "archiveB2B",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/M6vic9NHiILwDT5f"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "score": "={{ $('ParserOfClients').item.json.score }}",
+            "intent": "={{ $('ParserOfClients').item.json.intent }}",
+            "summary": "={{ $('ParserOfClients').item.json.summary }}",
+            "source": "={{ $json.source }}",
+            "email": "={{ $json.email }}",
+            "name": "={{ $('ParserOfClients').item.json.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "intent",
+              "displayName": "intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2032,
+        384
+      ],
+      "id": "4df4feb8-8c40-45cb-bad2-a5f0d2870549",
+      "name": "logInsert"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\n// Skip if this item has no email (came from GetAllClients branch)\nif (!input.email) {\n  return [];\n}\n\nconst currentEmail = input.email.trim().toLowerCase();\nconst existingRows = $('GetAllClients').all();\n\nif (!existingRows || existingRows.length === 0) {\n  return [{ json: { ...input, isDuplicate: false } }];\n}\n\nconst isDuplicate = existingRows.some(item => {\n  const existingEmail = (item.json.email || item.json.Email || '').trim().toLowerCase();\n  return existingEmail === currentEmail && existingEmail !== '';\n});\n\nreturn [{ json: { ...input, isDuplicate } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        192
+      ],
+      "id": "82e94cc0-9207-4636-ad23-917f104b931a",
+      "name": "CheckForDuplicates"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "hfR0R3OYoi8toag6",
+          "mode": "list",
+          "cachedResultName": "AllClients",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/hfR0R3OYoi8toag6"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email",
+              "keyValue": "={{ $json.email }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "isduplicate": "=true"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "isduplicate",
+              "displayName": "isduplicate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        976,
+        32
+      ],
+      "id": "83f7241b-7614-473c-9059-e4b5826bffd8",
+      "name": "UpdateDuplicateRow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "87ed344a-e972-4854-b53e-2f3aba48628a",
+              "leftValue": "={{ $json.isDuplicate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        832,
+        192
+      ],
+      "id": "6492fe0c-ba8f-410d-868a-8ca9603130f6",
+      "name": "IfDuplicate"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "RiTOn55LqvNCm1s8",
+          "mode": "list",
+          "cachedResultName": "RepB2B",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/RiTOn55LqvNCm1s8"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "score": "={{ $('ParserOfClients').item.json.score }}",
+            "intent": "={{ $('ParserOfClients').item.json.intent }}",
+            "summary": "={{ $('ParserOfClients').item.json.summary }}",
+            "source": "={{ $json.source }}",
+            "email": "={{ $json.email }}",
+            "notified_at": "={{ new Date().toISOString() }}",
+            "responded": false,
+            "escalated": false,
+            "name": "={{ $json.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "intent",
+              "displayName": "intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "notified_at",
+              "displayName": "notified_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "responded",
+              "displayName": "responded",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "escalated",
+              "displayName": "escalated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2032,
+        240
+      ],
+      "id": "5c098440-f28c-4791-a571-8c89544ab5a7",
+      "name": "RepInsert"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "hfR0R3OYoi8toag6",
+          "mode": "list",
+          "cachedResultName": "AllClients",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/hfR0R3OYoi8toag6"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "email": "={{ $json.email }}",
+            "source": "={{ $json.source }}",
+            "message": "={{ $json.message }}",
+            "isduplicate": "={{ $json.isDuplicate }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "isduplicate",
+              "displayName": "isduplicate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1056,
+        208
+      ],
+      "id": "2f8aedfb-7ea1-4549-a038-d4af24038300",
+      "name": "InsertAllClients"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "hfR0R3OYoi8toag6",
+          "mode": "list",
+          "cachedResultName": "AllClients",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/hfR0R3OYoi8toag6"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        464,
+        192
+      ],
+      "id": "56e359a3-106c-4a47-a4b9-7123c1009d6e",
+      "name": "GetAllClients",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        576,
+        544
+      ],
+      "id": "4cfa8384-b453-4385-a6c7-b79ec93679c3",
+      "name": "SummaryTrigger"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "RiTOn55LqvNCm1s8",
+          "mode": "list",
+          "cachedResultName": "RepB2B",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/RiTOn55LqvNCm1s8"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        864,
+        400
+      ],
+      "id": "295305ee-13f1-4187-9e6f-e03a093df88c",
+      "name": "GetRep"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "qrWYgZY5OqirbYJw",
+          "mode": "list",
+          "cachedResultName": "logB2B",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/qrWYgZY5OqirbYJw"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        544
+      ],
+      "id": "49041ca4-f129-4c5a-834a-d5325b76c478",
+      "name": "GetLog"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "M6vic9NHiILwDT5f",
+          "mode": "list",
+          "cachedResultName": "archiveB2B",
+          "cachedResultUrl": "/projects/7Ia4EFAqyfWAkuU8/datatables/M6vic9NHiILwDT5f"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        704
+      ],
+      "id": "6c9558e8-2b68-42e2-b268-3c965e11771c",
+      "name": "GetArchiv"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1136,
+        544
+      ],
+      "id": "123febf6-404d-44c4-8dc9-8fdb385faa84",
+      "name": "MergeAllData"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst total = items.length;\nconst high = items.filter(i => (i.json.score || 0) >= 7).length;\nconst moderate = items.filter(i => (i.json.score || 0) >= 5 && (i.json.score || 0) <= 6).length;\nconst low = items.filter(i => (i.json.score || 0) <= 4).length;\nconst escalated = items.filter(i => i.json.escalated === true).length;\n\nconst bySource = {};\nitems.forEach(i => {\n  const src = i.json.source || 'Unknown';\n  bySource[src] = (bySource[src] || 0) + 1;\n});\n\nconst sourceBreakdown = Object.entries(bySource)\n  .map(([src, count]) => `${src}: ${count}`)\n  .join('\\n');\n\nreturn [{\n  json: {\n    total,\n    high,\n    moderate,\n    low,\n    escalated,\n    sourceBreakdown\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1344,
+        544
+      ],
+      "id": "ea49b5a1-ddbf-427d-9ca8-09900b5d60f8",
+      "name": "Summary"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=📊 WEEKLY LEAD REPORT\n\nTotal leads: {{ $json.total }}\n\nBy source:\n{{ $json.sourceBreakdown }}\n\nScore breakdown:\n🟢 High (≥7): {{ $json.high }}\n🟡 Moderate (5-6): {{ $json.moderate }}\n🔴 Low (≤4): {{ $json.low }}\n\nEscalated: {{ $json.escalated }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        544
+      ],
+      "id": "5fd730b0-774f-4317-b158-9a76e1fa5d9a",
+      "name": "WeeklySummary",
+      "webhookId": "a777277d-69cf-4824-a1d8-9780fd7bc68a",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "X1aOerlnOVaT0bqT",
+          "name": "myserver"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1_sEyubkYXVUg9gQSd9esBJK2vVmOwbkvnyKrUPMB-wU",
+          "mode": "list",
+          "cachedResultName": "AllClientsDataB2B",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_sEyubkYXVUg9gQSd9esBJK2vVmOwbkvnyKrUPMB-wU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_sEyubkYXVUg9gQSd9esBJK2vVmOwbkvnyKrUPMB-wU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "email": "={{ $json.email }}",
+            "source": "={{ $json.source }}",
+            "isduplicate": "={{ $json.isduplicate }}",
+            "message": "={{ $json.message }}"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "isduplicate",
+              "displayName": "isduplicate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1328,
+        80
+      ],
+      "id": "38dc229e-19c5-4e8a-a664-1ad31edd7b03",
+      "name": "ExportClientsData",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PoZe4MnCdsJRYREz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1_sEyubkYXVUg9gQSd9esBJK2vVmOwbkvnyKrUPMB-wU",
+          "mode": "list",
+          "cachedResultName": "AllClientsDataB2B",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_sEyubkYXVUg9gQSd9esBJK2vVmOwbkvnyKrUPMB-wU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_sEyubkYXVUg9gQSd9esBJK2vVmOwbkvnyKrUPMB-wU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $json.email }}",
+            "isduplicate": "={{ $json.isduplicate }}"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "isduplicate",
+              "displayName": "isduplicate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1136,
+        32
+      ],
+      "id": "92851316-8e8a-468b-8e6d-207f15437889",
+      "name": "UpdateIsDuplicate",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PoZe4MnCdsJRYREz",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "ExtractFieldsWebhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "ExtractFieldsGmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "ExtractFieldsLinkedin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ExtractFieldsWebhook": {
+      "main": [
+        [
+          {
+            "node": "CheckForDuplicates",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetAllClients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ExtractFieldsGmail": {
+      "main": [
+        [
+          {
+            "node": "CheckForDuplicates",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetAllClients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ExtractFieldsLinkedin": {
+      "main": [
+        [
+          {
+            "node": "CheckForDuplicates",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetAllClients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "ParserOfClients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ParserOfClients": {
+      "main": [
+        [
+          {
+            "node": "ScoreChecker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ScoreChecker": {
+      "main": [
+        [
+          {
+            "node": "ArchivInsert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "RepInsert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "logInsert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ArchivInsert": {
+      "main": [
+        []
+      ]
+    },
+    "CheckForDuplicates": {
+      "main": [
+        [
+          {
+            "node": "IfDuplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IfDuplicate": {
+      "main": [
+        [
+          {
+            "node": "UpdateDuplicateRow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "InsertAllClients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RepInsert": {
+      "main": [
+        []
+      ]
+    },
+    "InsertAllClients": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "ExportClientsData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetAllClients": {
+      "main": [
+        [
+          {
+            "node": "CheckForDuplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SummaryTrigger": {
+      "main": [
+        [
+          {
+            "node": "GetRep",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetLog",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetArchiv",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetLog": {
+      "main": [
+        [
+          {
+            "node": "MergeAllData",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "GetRep": {
+      "main": [
+        [
+          {
+            "node": "MergeAllData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetArchiv": {
+      "main": [
+        [
+          {
+            "node": "MergeAllData",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "MergeAllData": {
+      "main": [
+        [
+          {
+            "node": "Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summary": {
+      "main": [
+        [
+          {
+            "node": "WeeklySummary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UpdateDuplicateRow": {
+      "main": [
+        [
+          {
+            "node": "UpdateIsDuplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "bvv5qlemK7nJiXdc",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "bc20fca2-097c-4a2d-b026-416a049ac6f3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6d02732c81716336476235c97efb52188caa99fc8b23d9d8fc1bf9045eb2d0a2"
+  },
+  "nodeGroups": [],
+  "id": "v59aR8reSCVVYkF2",
+  "tags": []
+}
